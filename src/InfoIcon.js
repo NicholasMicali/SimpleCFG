@@ -41,8 +41,8 @@ const InfoIcon = ({}) => {
         }}>
           <h1>How to use SimpleCFG:</h1>
           <p>Enter your python code in the code editor. Whichever function is at the top will be transformed into a CFG when you hit Generate! To see the actual output of your code's print statements, press the Output button below. To visualize the execution of your function hit Run, or step through with the buttons on the left. </p>
-          <p>The width control allows you to make you graph more narrow if starts to form too many branches. The maximum width is the number of blocks at the widest point in your graph</p>
-          <p>This application only excepts python code and it will not execute the right path if you leave ambiguos arguments in the function definintion. If this is the case in your code, you can redeclare the parameters as variables with real values at the top of the function.</p>
+          <p>The width control allows you to make you graph more narrow if starts to form too many branches. The maximum width is the number of blocks at the widest point in your graph. To avoid repeated loops, the visualizer will only execute a loop once, even if it would iterate many times at runtime.</p>
+          <p>This application only excepts python code and it will not execute the right path if you have ambigous variables like arguments or function calls. If this is the case in your code, you can redeclare the parameters as variables with real values at the top of the function.</p>
           <button onClick={togglePopup} style={{ marginTop: '10px', marginBottom: '20px' }}>Close</button>
         </div>
       )}

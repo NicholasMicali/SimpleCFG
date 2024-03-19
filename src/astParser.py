@@ -33,6 +33,8 @@ class Visitor(ast.NodeVisitor):
                 result += self.boolStr(node.op) + self.condPrint(val)
             return result
         elif isinstance(node, ast.BinOp):
+            if isinstance(node.op, ast.Mod):
+                return self.condPrint(node.left) + "%" + self.condPrint(node.right)
             return self.condPrint(node.left) + str(node.op) + self.condPrint(node.right)
         elif isinstance(node, ast.Compare):
             result = self.condPrint(node.left) + " "
@@ -66,7 +68,7 @@ class Visitor(ast.NodeVisitor):
           elif isinstance(node, ast.Gt):
               return ">"
           elif isinstance(node, ast.LtE):
-              return "<+"
+              return "<="
           elif isinstance(node, ast.GtE):
               return ">="
 
@@ -108,6 +110,8 @@ class Visitor(ast.NodeVisitor):
             return left_value * right_value
         elif isinstance(node.op, ast.Div):
             return left_value / right_value
+        elif isinstance(node.op, ast.Mod):
+            return left_value % right_value
         else:
             raise NotImplementedError("Unsupported BinOp")
 
@@ -347,7 +351,7 @@ def newPathEdge(src, dests):
     
 def writeDot(outFile, src, des):
     outFile = open("outfile.dot", "w")
-    outFile.write("digraph G {\nsplines=true\nNode [shape=rectangle, style=rounded, fixedsize=true, height=1.3, width=1.7]\n")
+    outFile.write("digraph G {\nsplines=true\nNode [shape=rectangle, style=rounded, fixedsize=false, height=1.3, width=1.7]\n")
     outFile.write("nodesep=1;\n")
     for node in nodes.keys():
         name = nodes[node]
@@ -396,9 +400,9 @@ def writeDot(outFile, src, des):
         dests = loopEdges[edge]
         for dest in dests:
             if src == edge and des == dest:
-                outFile.write(f"{edge} -> {dest} [constraint=\"false\", color=\"gold\"]\n")
+                outFile.write(f"{edge} -> {dest} [color=\"gold\"]\n")
             else:
-                outFile.write(f"{edge} -> {dest} [constraint=\"false\"]\n") #constraint=\"false\"
+                outFile.write(f"{edge} -> {dest} []\n") #constraint=\"false\"
     outFile.write("}")
 
 
@@ -419,7 +423,7 @@ def main():
     #for node in nodes.keys():
     #    if (nodes[node] != "Main:" and node not in [item for sublist in edges.values() for item in sublist]):
     #        return
-
+    
     outFile = open("outfile.dot", "w")
     writeDot(outFile, -5, -5)
     os.system('./run_dot.sh')
